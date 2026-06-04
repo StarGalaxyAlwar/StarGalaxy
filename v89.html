@@ -2,11 +2,11 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Star Galaxy Test</title>
+<title>Test</title>
 </head>
 <body>
 
-<h2>Google Sheet Fetch Test</h2>
+<h2>Test Working</h2>
 
 <select id="cat">
 <option>Loading...</option>
@@ -14,38 +14,8 @@
 
 <script>
 
-const CSV_URL =
-"https://docs.google.com/spreadsheets/d/e/2PACX-1vRxd_G-sJAfhK7PUWSi_g6_JHdsWqOI4ZZsULpRmRtsFUUSmXiaCswhcPi5zoohvGwN-54gIRxRs_8C/pub?gid=354666361&single=true&output=csv";
-
-async function loadCategories(){
-
- const txt = await fetch(CSV_URL).then(r=>r.text());
-
- const rows = txt.trim().split("\n");
-
- const categories = new Set();
-
- rows.slice(1).forEach(r=>{
-
-   const c = r.split(",");
-
-   categories.add(c[2]);
-
- });
-
- const cat = document.getElementById("cat");
-
- cat.innerHTML = "";
-
- categories.forEach(x=>{
-
-   cat.innerHTML += `<option>${x}</option>`;
-
- });
-
-}
-
-loadCategories();
+document.getElementById("cat").innerHTML =
+"<option>Wire</option><option>Switchs</option>";
 
 </script>
 
