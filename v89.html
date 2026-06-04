@@ -111,7 +111,7 @@ function loadProducts(){
 "<tr>" +
 "<td>"+(r[4]||"")+"</td>" +
 "<td>₹"+(r[6]||"0")+"</td>" +
-"<td><input type='number' min='0' value='0' onchange='calc(this,"+r[6]+")'></td>" +
+"<td><input type='number' min='0' value='0' data-rate='"+(r[6]||0)+"' onchange='calc(this)'></td>" +
 "<td class='amt'>₹0</td>" +
 "</tr>";
  });
@@ -138,13 +138,19 @@ document
 );
 
 loadData();
-function calc(el,rate){
+function calc(el){
 
- const row = el.parentNode.parentNode;
+ const rate =
+ Number(el.getAttribute("data-rate")) || 0;
 
- const qty = Number(el.value)||0;
+ const qty =
+ Number(el.value) || 0;
 
- const amt = qty * rate;
+ const amt =
+ rate * qty;
+
+ const row =
+ el.closest("tr");
 
  row.querySelector(".amt").innerHTML =
  "₹"+amt;
@@ -152,7 +158,6 @@ function calc(el,rate){
  updateGrandTotal();
 
 }
-
 function updateGrandTotal(){
 
  let total = 0;
