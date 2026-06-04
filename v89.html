@@ -144,11 +144,7 @@ resize:vertical;
 <h3>Products</h3>
 
 <div id="products"></div>
- <h3>Quotation</h3>
 
-<div id="quoteBox">
-No Items Added
-</div>
  <h3>Customer Details</h3>
 
 <label>Customer Name</label>
@@ -170,7 +166,7 @@ const CSV_URL =
 "https://docs.google.com/spreadsheets/d/e/2PACX-1vRxd_G-sJAfhK7PUWSi_g6_JHdsWqOI4ZZsULpRmRtsFUUSmXiaCswhcPi5zoohvGwN-54gIRxRs_8C/pub?gid=354666361&single=true&output=csv";
 
 let rowsData=[];
- let cart = [];
+ let qtyStore = {};
 
 async function loadData(){
 
@@ -250,8 +246,20 @@ function loadProducts(){
 "<td>"+(r[4]||"")+"</td>" +
 "<td>₹"+(r[6]||"0")+"</td>" +
 "<td><input type='number' min='0' value='0' data-rate='"+(r[6]||0)+"' onchange='calc(this)'></td>" +
-"<td class='amt'>₹0</td>" +
-"<td><button onclick=\"addToQuote(this)\">Add</button></td>" +
+const productName = r[4] || "";
+
+const savedQty =
+qtyStore[productName] || 0;
+
+const savedAmt =
+savedQty * Number(r[6] || 0);
+
+html +=
+"<tr>" +
+"<td>"+productName+"</td>" +
+"<td>₹"+(r[6]||"0")+"</td>" +
+"<td><input type='number' min='0' value='"+savedQty+"' data-product='"+productName+"' data-rate='"+(r[6]||0)+"' onchange='calc(this)'></td>" +
+"<td class='amt'>₹"+savedAmt+"</td>" +
 "</tr>";
  });
 
@@ -279,14 +287,19 @@ document
 loadData();
 function calc(el){
 
+ const product =
+ el.getAttribute("data-product");
+
  const rate =
  Number(el.getAttribute("data-rate")) || 0;
 
  const qty =
  Number(el.value) || 0;
 
+ qtyStore[product] = qty;
+
  const amt =
- rate * qty;
+ qty * rate;
 
  const row =
  el.closest("tr");
@@ -318,40 +331,6 @@ function updateGrandTotal(){
 
  grand.innerHTML =
  "Grand Total : ₹"+total;
-
-}
- function addToQuote(btn){
-
- const row = btn.closest("tr");
-
- const product =
- row.cells[0].innerText;
-
- const rate =
- Number(
- row.cells[1].innerText.replace("₹","")
- ) || 0;
-
- const qty =
- Number(
- row.querySelector("input").value
- ) || 0;
-
- if(qty<=0){
-   alert("Enter Qty First");
-   return;
- }
-
- const amount = rate * qty;
-
- cart.push({
-   product,
-   rate,
-   qty,
-   amount
- });
-
- renderQuote();
 
 }
 
