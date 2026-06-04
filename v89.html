@@ -183,12 +183,15 @@ font-size:14px;
 <div id="products"></div>
 
 <h3>Selected Products</h3>
+<div id="quoteSection" style="display:none;">
+
+<h3>Selected Products</h3>
+
 <div id="quoteGrid">
 No Products Selected
 </div>
 
- <div id="customerSection" style="display:none;">
- <h3>Customer Details</h3>
+<h3>Customer Details</h3>
 
 <label>Customer Name</label>
 <input type="text" id="custName">
@@ -198,9 +201,10 @@ No Products Selected
 
 <label>Address</label>
 <textarea id="custAddress"></textarea>
-</div>
 
 <h2 id="grand">Grand Total : ₹0</h2>
+
+</div>
 <script>
 
 const CSV_URL =
@@ -372,18 +376,7 @@ function updateGrandTotal(){
 
 }
 
- function showCustomerForm(){
-
- document.getElementById("customerSection")
- .style.display = "block";
-
- document
- .getElementById("customerSection")
- .scrollIntoView({
-   behavior:"smooth"
- });
-
-}
+ function showCustomerForm()
 document
 .getElementById("cat")
 .addEventListener(
@@ -401,8 +394,8 @@ document
 loadData();
 
 </script>
-<button class="btn" onclick="showCustomerForm()">
-Create Quote
+<button class="btn" onclick="showQuoteSection()">
+GET QUOTE
 </button>
 
 </div>
