@@ -138,7 +138,52 @@ document
 );
 
 loadData();
+function calc(el,rate){
 
+ const row = el.parentNode.parentNode;
+
+ const qty = Number(el.value)||0;
+
+ const amt = qty * rate;
+
+ row.querySelector(".amt").innerHTML =
+ "₹"+amt;
+
+ updateGrandTotal();
+
+}
+
+function updateGrandTotal(){
+
+ let total = 0;
+
+ document
+ .querySelectorAll(".amt")
+ .forEach(x=>{
+
+   total += Number(
+   x.innerText.replace("₹","")
+   ) || 0;
+
+ });
+
+ let grand =
+ document.getElementById("grand");
+
+ if(!grand){
+
+   grand=document.createElement("h2");
+
+   grand.id="grand";
+
+   document.body.appendChild(grand);
+
+ }
+
+ grand.innerHTML =
+ "Grand Total : ₹"+total;
+
+}
 </script>
 
 </body>
