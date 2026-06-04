@@ -319,37 +319,7 @@ function updateGrandTotal(){
 
 }
 
-function renderQuote(){
 
- let html =
- "<table>" +
- "<tr><th>Product</th><th>Qty</th><th>Rate</th><th>Amount</th></tr>";
-
- let total = 0;
-
- cart.forEach(item=>{
-
-   total += item.amount;
-
-   html +=
-   "<tr>" +
-   "<td>"+item.product+"</td>" +
-   "<td>"+item.qty+"</td>" +
-   "<td>"+item.rate+"</td>" +
-   "<td>"+item.amount+"</td>" +
-   "</tr>";
-
- });
-
- html += "</table>";
-
- document.getElementById("quoteBox").innerHTML =
- html;
-
- document.getElementById("grand").innerHTML =
- "Grand Total : ₹"+total;
-
-}
 </script>
 <button class="btn">
 Create Quote
