@@ -26,7 +26,7 @@ th{background:#f2f2f2}
 <h3>Products</h3>
 
 <div id="products"></div>
-
+<h2 id="grand">Grand Total : ₹0</h2>
 <script>
 
 const CSV_URL =
@@ -175,15 +175,7 @@ function updateGrandTotal(){
  let grand =
  document.getElementById("grand");
 
- if(!grand){
-
-   grand=document.createElement("h2");
-
-   grand.id="grand";
-
-   document.body.appendChild(grand);
-
- }
+ 
 
  grand.innerHTML =
  "Grand Total : ₹"+total;
