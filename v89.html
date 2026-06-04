@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Star Galaxy V89</title>
+<style>
+body{
+font-family:Arial,sans-serif;
+background:#eef2f7;
+margin:0;
+padding:0;
+}
+
+.header{
+background:#003366;
+color:white;
+text-align:center;
+padding:25px;
+}
+
+.header h1{
+margin:0;
+font-size:42px;
+}
+
+.header p{
+margin-top:10px;
+font-size:18px;
+}
+
+.container{
+max-width:1200px;
+margin:20px auto;
+background:white;
+padding:25px;
+border-radius:15px;
+box-shadow:0 2px 10px rgba(0,0,0,.15);
+}
+
+label{
+font-weight:bold;
+display:block;
+margin-top:15px;
+margin-bottom:5px;
+}
+
+select{
+width:100%;
+padding:12px;
+border:1px solid #ccc;
+border-radius:8px;
+font-size:16px;
+}
+
+input[type=number]{
+width:70px;
+padding:8px;
+text-align:center;
+border:1px solid #ccc;
+border-radius:6px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:20px;
+}
+
+th{
+background:#003366;
+color:white;
+padding:10px;
+}
+
+td{
+padding:10px;
+border:1px solid #ddd;
+}
+
+tr:nth-child(even){
+background:#f8f8f8;
+}
+
+#grand{
+background:#28a745;
+color:white;
+padding:20px;
+border-radius:12px;
+text-align:center;
+margin-top:25px;
+font-size:34px;
+font-weight:bold;
+box-shadow:0 4px 10px rgba(0,0,0,.2);
+}
+
+.btn{
+background:#28a745;
+color:white;
+border:none;
+padding:15px;
+width:100%;
+font-size:18px;
+border-radius:10px;
+cursor:pointer;
+margin-top:20px;
+}
+
+.btn:hover{
+background:#218838;
+}
+input[type=text],
+textarea{
+width:100%;
+padding:12px;
+border:1px solid #ccc;
+border-radius:8px;
+font-size:16px;
+margin-bottom:15px;
+box-sizing:border-box;
+}
+
+textarea{
+height:80px;
+resize:vertical;
+}
+</style>
+</head>
+<body>
+<div class="header">
+<h1>STAR HAVELLS GALAXY</h1>
+<p>Product Rate Reference Portal</p>
+</div>
+
+<div class="container">
+
+<label>Category</label><br>
+<select id="cat"></select>
+
+<br>
+
+<label>Sub Category</label><br>
+<select id="sub"></select>
+
+<h3>Products</h3>
+
+<div id="products"></div>
+
+<h3>Selected Products</h3>
+<div id="quoteGrid">
+No Products Selected
+</div>
+
+ <div id="customerSection" style="display:none;">
+ <h3>Customer Details</h3>
+
+<label>Customer Name</label>
+<input type="text" id="custName">
+
+<label>Mobile Number</label>
+<input type="text" id="custMobile">
+
+<label>Address</label>
+<textarea id="custAddress"></textarea>
+</div>
+
+<h2 id="grand">Grand Total : ₹0</h2>
+<script>
+
+const CSV_URL =
+"https://docs.google.com/spreadsheets/d/e/2PACX-1vRxd_G-sJAfhK7PUWSi_g6_JHdsWqOI4ZZsULpRmRtsFUUSmXiaCswhcPi5zoohvGwN-54gIRxRs_8C/pub?gid=354666361&single=true&output=csv";
+
+let rowsData=[];
+let qtyStore = {};
+let productStore = {};
+async function loadData(){
+
+ const txt = await fetch(CSV_URL).then(r=>r.text());
+
+ rowsData = txt
+ .trim()
+ .split("\n")
+ .slice(1)
+ .map(r=>r.split(","));
+
+ const categories = [...new Set(
+ rowsData.map(r=>r[2]?.trim())
+ )];
+
+ const cat =
+ document.getElementById("cat");
+
+ cat.innerHTML="";
+
+ categories.forEach(c=>{
+   cat.innerHTML +=
+   `<option value="${c}">${c}</option>`;
+ });
+
+ loadSubCategories();
+
+}
+
+function loadSubCategories(){
+
+ const selectedCat =
+ document.getElementById("cat").value;
+
+ const subs = [...new Set(
+ rowsData
+ .filter(r=>r[2]?.trim()===selectedCat)
+ .map(r=>r[3]?.trim())
+ )];
+
+ const sub =
+ document.getElementById("sub");
+
+ sub.innerHTML="";
+
+ subs.forEach(s=>{
+   sub.innerHTML +=
+   `<option value="${s}">${s}</option>`;
+ });
+
+ loadProducts();
+
+}
+
+function loadProducts(){
+
+ const selectedCat =
+ document.getElementById("cat").value;
+
+ const selectedSub =
+ document.getElementById("sub").value;
+
+ const rows =
+ rowsData.filter(r =>
+ r[2]?.trim()===selectedCat &&
+ r[3]?.trim()===selectedSub
+ );
+
+ let html =
+ "<table>" +
+ "<tr><th>Product</th><th>Rate</th><th>Qty</th><th>Amount</th></tr>";
+
+ rows.forEach(r=>{
+
+  const productName = r[4] || "";
+
+  const savedQty =
+  qtyStore[productName] || 0;
+
+  const rate =
+  Number(r[6] || 0);
+
+  const savedAmt =
+  savedQty * rate;
+
+  html +=
+  "<tr>" +
+  "<td>"+productName+"</td>" +
+  "<td>₹"+rate+"</td>" +
+  "<td><input type='number' min='0' value='"+savedQty+"' data-product='"+productName+"' data-rate='"+rate+"' onchange='calc(this)'></td>" +
+  "<td class='amt'>₹"+savedAmt+"</td>" +
+  "</tr>";
+
+ });
+
+ html += "</table>";
+
+ document.getElementById("products").innerHTML =
+ html;
+
+ updateGrandTotal();
+
+}
+function calc(el){
+
+ const product =
+ el.getAttribute("data-product");
+
+ const rate =
+ Number(el.getAttribute("data-rate")) || 0;
+
+ const qty =
+ Number(el.value) || 0;
+
+ qtyStore[product] = qty;
+ productStore[product] = {
+ qty: qty,
+ rate: rate
+};
+
+ const amt =
+ qty * rate;
+
+ const row =
+ el.closest("tr");
+
+ row.querySelector(".amt").innerHTML =
+ "₹"+amt;
+
+ updateGrandTotal();
+
+}
+function updateGrandTotal(){
+
+ let total = 0;
+
+ let html =
+ "<table>" +
+ "<tr><th>Product</th><th>Qty</th><th>Rate</th><th>Amount</th></tr>";
+
+ for(const product in productStore){
+
+   const qty =
+   productStore[product].qty;
+
+   const rate =
+   productStore[product].rate;
+
+   if(qty > 0){
+
+     const amount =
+     qty * rate;
+
+     total += amount;
+
+     html +=
+     "<tr>" +
+     "<td>"+product+"</td>" +
+     "<td>"+qty+"</td>" +
+     "<td>₹"+rate+"</td>" +
+     "<td>₹"+amount+"</td>" +
+     "</tr>";
+
+   }
+
+ }
+
+ html += "</table>";
+
+ document.getElementById("grand").innerHTML =
+ "Grand Total : ₹"+total;
+
+ document.getElementById("quoteGrid").innerHTML =
+ html;
+
+}
+
+ function showCustomerForm(){
+
+ document.getElementById("customerSection")
+ .style.display = "block";
+
+ document
+ .getElementById("customerSection")
+ .scrollIntoView({
+   behavior:"smooth"
+ });
+
+}
+document
+.getElementById("cat")
+.addEventListener(
+ "change",
+ loadSubCategories
+);
+
+document
+.getElementById("sub")
+.addEventListener(
+ "change",
+ loadProducts
+);
+
+loadData();
+
+</script>
+<button class="btn" onclick="showCustomerForm()">
+Create Quote
+</button>
+
+</div>
+</body>
+</html>
