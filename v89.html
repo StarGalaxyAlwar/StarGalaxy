@@ -17,7 +17,8 @@
 <select id="sub">
 <option>Select Category First</option>
 </select>
-
+<h3>Products</h3>
+<div id="products"></div>
 <script>
 
 const CSV_URL =
@@ -73,7 +74,44 @@ document
 .addEventListener("change",loadSubCategories);
 
 loadData();
+function loadProducts(){
 
+ const selectedCat =
+ document.getElementById("cat").value;
+
+ const selectedSub =
+ document.getElementById("sub").value;
+
+ const rows = rowsData.filter(r =>
+ r[2]?.trim()===selectedCat &&
+ r[3]?.trim()===selectedSub
+ );
+
+ let html =
+ "<table border='1' cellpadding='8'>" +
+ "<tr><th>Product</th><th>Rate</th></tr>";
+
+ rows.forEach(r=>{
+
+   html +=
+   "<tr>" +
+   "<td>"+r[4]+"</td>" +
+   "<td>₹"+r[6]+"</td>" +
+   "</tr>";
+
+ });
+
+ html += "</table>";
+
+ document.getElementById("products").innerHTML =
+ html;
+
+}
+
+ document
+.getElementById("sub")
+.addEventListener("change",loadProducts);
+ loadProducts();
 </script>
 
 </body>
