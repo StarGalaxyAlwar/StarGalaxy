@@ -123,6 +123,43 @@ textarea{
 height:80px;
 resize:vertical;
 }
+.product-card{
+background:#fff;
+border:1px solid #ddd;
+border-radius:12px;
+padding:15px;
+margin-bottom:12px;
+box-shadow:0 2px 6px rgba(0,0,0,.08);
+}
+
+.product-name{
+font-size:18px;
+font-weight:bold;
+margin-bottom:8px;
+}
+
+.product-rate{
+font-size:20px;
+color:#003366;
+font-weight:bold;
+}
+
+@media (max-width:768px){
+
+.container{
+margin:10px;
+padding:15px;
+}
+
+.header h1{
+font-size:28px;
+}
+
+.header p{
+font-size:14px;
+}
+
+}
 </style>
 </head>
 <body>
@@ -239,31 +276,15 @@ function loadProducts(){
  r[3]?.trim()===selectedSub
  );
 
- let html =
- "<table>" +
- "<tr><th>Product</th><th>Rate</th><th>Qty</th><th>Amount</th></tr>";
+ let html = "";
 
  rows.forEach(r=>{
 
-  const productName = r[4] || "";
-
-  const savedQty =
-  qtyStore[productName] || 0;
-
-  const rate =
-  Number(r[6] || 0);
-
-  const savedAmt =
-  savedQty * rate;
-
   html +=
-  "<tr>" +
-  "<td>"+productName+"</td>" +
-  "<td>₹"+rate+"</td>" +
-  "<td><input type='number' min='0' value='"+savedQty+"' data-product='"+productName+"' data-rate='"+rate+"' onchange='calc(this)'></td>" +
-  "<td class='amt'>₹"+savedAmt+"</td>" +
-  "</tr>";
-
+"<div class='product-card'>" +
+"<div class='product-name'>"+productName+"</div>" +
+"<div class='product-rate'>Rate : ₹"+rate+"</div>" +
+"</div>";
  });
 
  html += "</table>";
