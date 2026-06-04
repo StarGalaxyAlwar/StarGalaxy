@@ -149,6 +149,8 @@ resize:vertical;
 <div id="quoteGrid">
 No Products Selected
 </div>
+
+ <div id="customerSection" style="display:none;">
  <h3>Customer Details</h3>
 
 <label>Customer Name</label>
@@ -159,7 +161,7 @@ No Products Selected
 
 <label>Address</label>
 <textarea id="custAddress"></textarea>
-
+</div>
 
 <h2 id="grand">Grand Total : ₹0</h2>
 <script>
@@ -345,6 +347,19 @@ function updateGrandTotal(){
  html;
 
 }
+
+ function showCustomerForm(){
+
+ document.getElementById("customerSection")
+ .style.display = "block";
+
+ document
+ .getElementById("customerSection")
+ .scrollIntoView({
+   behavior:"smooth"
+ });
+
+}
 document
 .getElementById("cat")
 .addEventListener(
@@ -360,9 +375,9 @@ document
 );
 
 loadData();
-loadData();
+
 </script>
-<button class="btn">
+<button class="btn" onclick="showCustomerForm()">
 Create Quote
 </button>
 
