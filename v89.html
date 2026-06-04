@@ -280,19 +280,22 @@ function loadProducts(){
 
  rows.forEach(r=>{
 
-  html +=
-"<div class='product-card'>" +
-"<div class='product-name'>"+productName+"</div>" +
-"<div class='product-rate'>Rate : ₹"+rate+"</div>" +
-"</div>";
- });
+  const productName =
+  r[4] || "";
 
- html += "</table>";
+  const rate =
+  r[6] || "0";
+
+  html +=
+  "<div class='product-card'>" +
+  "<div class='product-name'>"+productName+"</div>" +
+  "<div class='product-rate'>Rate : ₹"+rate+"</div>" +
+  "</div>";
+
+ });
 
  document.getElementById("products").innerHTML =
  html;
-
- updateGrandTotal();
 
 }
 function calc(el){
