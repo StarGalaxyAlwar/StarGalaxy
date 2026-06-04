@@ -185,7 +185,7 @@ font-size:14px;
 GET QUOTE
 </button>
 
-<h3>Selected Products</h3>
+
 <div id="quoteSection" style="display:none;">
 
 <h3>Selected Products</h3>
@@ -379,7 +379,18 @@ function updateGrandTotal(){
 
 }
 
- function showCustomerForm()
+ function showQuoteSection(){
+
+ document.getElementById("quoteSection")
+ .style.display = "block";
+
+ document.getElementById("quoteSection")
+ .scrollIntoView({
+   behavior:"smooth"
+ });
+
+}
+
 document
 .getElementById("cat")
 .addEventListener(
@@ -395,11 +406,7 @@ document
 );
 
 loadData();
-
 </script>
-<button class="btn" onclick="showQuoteSection()">
-GET QUOTE
-</button>
 
 </div>
 </body>
