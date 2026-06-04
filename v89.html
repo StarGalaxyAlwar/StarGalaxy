@@ -316,8 +316,22 @@ function updateGrandTotal(){
  "Grand Total : ₹"+total;
 
 }
+document
+.getElementById("cat")
+.addEventListener(
+ "change",
+ loadSubCategories
+);
 
+document
+.getElementById("sub")
+.addEventListener(
+ "change",
+ loadProducts
+);
 
+loadData();
+loadData();
 </script>
 <button class="btn">
 Create Quote
