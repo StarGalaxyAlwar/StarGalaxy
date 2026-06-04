@@ -2,46 +2,49 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Star Galaxy V89 Test</title>
+<title>Star Galaxy V89</title>
 </head>
 <body>
 
-<h2>Google Sheet Test</h2>
+<h2>Star Galaxy V89</h2>
 
-<p>Category</p>
+<label>Category</label>
 <select id="cat">
 <option>Loading...</option>
 </select>
 
-<p>Sub Category</p>
+<label>Sub Category</label>
 <select id="sub">
 <option>Select Category First</option>
 </select>
-<h3>Products</h3>
-<div id="products"></div>
+
 <script>
 
 const CSV_URL =
 "https://docs.google.com/spreadsheets/d/e/2PACX-1vRxd_G-sJAfhK7PUWSi_g6_JHdsWqOI4ZZsULpRmRtsFUUSmXiaCswhcPi5zoohvGwN-54gIRxRs_8C/pub?gid=354666361&single=true&output=csv";
 
-let rowsData = [];
+let rowsData=[];
 
 async function loadData(){
 
  const txt = await fetch(CSV_URL).then(r=>r.text());
 
- const rows = txt.trim().split("\n");
+ rowsData = txt.trim()
+ .split("\n")
+ .slice(1)
+ .map(r=>r.split(","));
 
- rowsData = rows.slice(1).map(r=>r.split(","));
+ const cats = [...new Set(
+ rowsData.map(r=>r[2]?.trim())
+ )];
 
- const categories = [...new Set(rowsData.map(r=>r[2]?.trim()))];
+ const cat=document.getElementById("cat");
 
- const cat = document.getElementById("cat");
+ cat.innerHTML="";
 
- cat.innerHTML = "";
-
- categories.forEach(c=>{
-   cat.innerHTML += `<option value="${c}">${c}</option>`;
+ cats.forEach(c=>{
+   cat.innerHTML +=
+   `<option value="${c}">${c}</option>`;
  });
 
  loadSubCategories();
@@ -59,59 +62,27 @@ function loadSubCategories(){
  .map(r=>r[3]?.trim())
  )];
 
- const sub = document.getElementById("sub");
+ const sub =
+ document.getElementById("sub");
 
- sub.innerHTML = "";
+ sub.innerHTML="";
 
  subs.forEach(s=>{
-   sub.innerHTML += `<option>${s}</option>`;
+   sub.innerHTML +=
+   `<option>${s}</option>`;
  });
 
 }
 
 document
 .getElementById("cat")
-.addEventListener("change",loadSubCategories);
+.addEventListener(
+ "change",
+ loadSubCategories
+);
 
 loadData();
-function loadProducts(){
 
- const selectedCat =
- document.getElementById("cat").value;
-
- const selectedSub =
- document.getElementById("sub").value;
-
- const rows = rowsData.filter(r =>
- r[2]?.trim()===selectedCat &&
- r[3]?.trim()===selectedSub
- );
-
- let html =
- "<table border='1' cellpadding='8'>" +
- "<tr><th>Product</th><th>Rate</th></tr>";
-
- rows.forEach(r=>{
-
-   html +=
-   "<tr>" +
-   "<td>"+r[4]+"</td>" +
-   "<td>₹"+r[6]+"</td>" +
-   "</tr>";
-
- });
-
- html += "</table>";
-
- document.getElementById("products").innerHTML =
- html;
-
-}
-
- document
-.getElementById("sub")
-.addEventListener("change",loadProducts);
- loadProducts();
 </script>
 
 </body>
