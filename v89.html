@@ -4,15 +4,114 @@
 <meta charset="UTF-8">
 <title>Star Galaxy V89</title>
 <style>
-body{font-family:Arial;padding:20px}
-select{padding:8px;margin:8px 0;width:300px}
-table{border-collapse:collapse;width:100%;margin-top:15px}
-th,td{border:1px solid #ddd;padding:8px}
-th{background:#f2f2f2}
+body{
+font-family:Arial,sans-serif;
+background:#eef2f7;
+margin:0;
+padding:0;
+}
+
+.header{
+background:#003366;
+color:white;
+text-align:center;
+padding:25px;
+}
+
+.header h1{
+margin:0;
+font-size:42px;
+}
+
+.header p{
+margin-top:10px;
+font-size:18px;
+}
+
+.container{
+max-width:1200px;
+margin:20px auto;
+background:white;
+padding:25px;
+border-radius:15px;
+box-shadow:0 2px 10px rgba(0,0,0,.15);
+}
+
+label{
+font-weight:bold;
+display:block;
+margin-top:15px;
+margin-bottom:5px;
+}
+
+select{
+width:100%;
+padding:12px;
+border:1px solid #ccc;
+border-radius:8px;
+font-size:16px;
+}
+
+input[type=number]{
+width:80px;
+padding:6px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:20px;
+}
+
+th{
+background:#003366;
+color:white;
+padding:10px;
+}
+
+td{
+padding:10px;
+border:1px solid #ddd;
+}
+
+tr:nth-child(even){
+background:#f8f8f8;
+}
+
+#grand{
+background:#28a745;
+color:white;
+padding:15px;
+border-radius:10px;
+text-align:center;
+margin-top:20px;
+font-size:28px;
+}
+
+.btn{
+background:#28a745;
+color:white;
+border:none;
+padding:15px;
+width:100%;
+font-size:18px;
+border-radius:10px;
+cursor:pointer;
+margin-top:20px;
+}
+
+.btn:hover{
+background:#218838;
+}
 </style>
 </head>
 <body>
+<div class="header">
+<h1>STAR HAVELLS GALAXY</h1>
+<p>Product Rate Reference Portal</p>
+</div>
 
+<div class="container">
 <h2>Star Galaxy V89</h2>
 
 <label>Category</label><br>
@@ -182,6 +281,10 @@ function updateGrandTotal(){
 
 }
 </script>
+<button class="btn">
+Create Quote
+</button>
 
+</div>
 </body>
 </html>
