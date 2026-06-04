@@ -107,12 +107,13 @@ function loadProducts(){
 
  rows.forEach(r=>{
 
-   html +=
-   "<tr>" +
-   "<td>"+(r[4]||"")+"</td>" +
-   "<td>₹"+(r[6]||"0")+"</td>" +
-   "</tr>";
-
+  html +=
+"<tr>" +
+"<td>"+(r[4]||"")+"</td>" +
+"<td>₹"+(r[6]||"0")+"</td>" +
+"<td><input type='number' min='0' value='0' onchange='calc(this,"+r[6]+")'></td>" +
+"<td class='amt'>₹0</td>" +
+"</tr>";
  });
 
  html += "</table>";
