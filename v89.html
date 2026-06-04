@@ -241,7 +241,7 @@ function loadProducts(){
 
  let html =
  "<table>" +
- "<tr><th>Product</th><th>Rate</th><th>Qty</th><th>Amount</th></tr>";
+"<tr><th>Product</th><th>Rate</th><th>Qty</th><th>Amount</th><th>Add</th></tr>";
 
  rows.forEach(r=>{
 
@@ -251,6 +251,7 @@ function loadProducts(){
 "<td>₹"+(r[6]||"0")+"</td>" +
 "<td><input type='number' min='0' value='0' data-rate='"+(r[6]||0)+"' onchange='calc(this)'></td>" +
 "<td class='amt'>₹0</td>" +
+"<td><button onclick=\"addToQuote(this)\">Add</button></td>" +
 "</tr>";
  });
 
@@ -316,6 +317,72 @@ function updateGrandTotal(){
  
 
  grand.innerHTML =
+ "Grand Total : ₹"+total;
+
+}
+ function addToQuote(btn){
+
+ const row = btn.closest("tr");
+
+ const product =
+ row.cells[0].innerText;
+
+ const rate =
+ Number(
+ row.cells[1].innerText.replace("₹","")
+ ) || 0;
+
+ const qty =
+ Number(
+ row.querySelector("input").value
+ ) || 0;
+
+ if(qty<=0){
+   alert("Enter Qty First");
+   return;
+ }
+
+ const amount = rate * qty;
+
+ cart.push({
+   product,
+   rate,
+   qty,
+   amount
+ });
+
+ renderQuote();
+
+}
+
+function renderQuote(){
+
+ let html =
+ "<table>" +
+ "<tr><th>Product</th><th>Qty</th><th>Rate</th><th>Amount</th></tr>";
+
+ let total = 0;
+
+ cart.forEach(item=>{
+
+   total += item.amount;
+
+   html +=
+   "<tr>" +
+   "<td>"+item.product+"</td>" +
+   "<td>"+item.qty+"</td>" +
+   "<td>"+item.rate+"</td>" +
+   "<td>"+item.amount+"</td>" +
+   "</tr>";
+
+ });
+
+ html += "</table>";
+
+ document.getElementById("quoteBox").innerHTML =
+ html;
+
+ document.getElementById("grand").innerHTML =
  "Grand Total : ₹"+total;
 
 }
