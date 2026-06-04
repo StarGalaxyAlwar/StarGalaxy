@@ -237,30 +237,29 @@ function loadProducts(){
 
  let html =
  "<table>" +
-"<tr><th>Product</th><th>Rate</th><th>Qty</th><th>Amount</th><th>Add</th></tr>";
+ "<tr><th>Product</th><th>Rate</th><th>Qty</th><th>Amount</th></tr>";
 
  rows.forEach(r=>{
 
+  const productName = r[4] || "";
+
+  const savedQty =
+  qtyStore[productName] || 0;
+
+  const rate =
+  Number(r[6] || 0);
+
+  const savedAmt =
+  savedQty * rate;
+
   html +=
-"<tr>" +
-"<td>"+(r[4]||"")+"</td>" +
-"<td>₹"+(r[6]||"0")+"</td>" +
-"<td><input type='number' min='0' value='0' data-rate='"+(r[6]||0)+"' onchange='calc(this)'></td>" +
-const productName = r[4] || "";
+  "<tr>" +
+  "<td>"+productName+"</td>" +
+  "<td>₹"+rate+"</td>" +
+  "<td><input type='number' min='0' value='"+savedQty+"' data-product='"+productName+"' data-rate='"+rate+"' onchange='calc(this)'></td>" +
+  "<td class='amt'>₹"+savedAmt+"</td>" +
+  "</tr>";
 
-const savedQty =
-qtyStore[productName] || 0;
-
-const savedAmt =
-savedQty * Number(r[6] || 0);
-
-html +=
-"<tr>" +
-"<td>"+productName+"</td>" +
-"<td>₹"+(r[6]||"0")+"</td>" +
-"<td><input type='number' min='0' value='"+savedQty+"' data-product='"+productName+"' data-rate='"+(r[6]||0)+"' onchange='calc(this)'></td>" +
-"<td class='amt'>₹"+savedAmt+"</td>" +
-"</tr>";
  });
 
  html += "</table>";
@@ -268,23 +267,9 @@ html +=
  document.getElementById("products").innerHTML =
  html;
 
+ updateGrandTotal();
+
 }
-
-document
-.getElementById("cat")
-.addEventListener(
- "change",
- loadSubCategories
-);
-
-document
-.getElementById("sub")
-.addEventListener(
- "change",
- loadProducts
-);
-
-loadData();
 function calc(el){
 
  const product =
