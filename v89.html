@@ -3,20 +3,29 @@
 <head>
 <meta charset="UTF-8">
 <title>Star Galaxy V89</title>
+<style>
+body{font-family:Arial;padding:20px}
+select{padding:8px;margin:8px 0;width:300px}
+table{border-collapse:collapse;width:100%;margin-top:15px}
+th,td{border:1px solid #ddd;padding:8px}
+th{background:#f2f2f2}
+</style>
 </head>
 <body>
 
 <h2>Star Galaxy V89</h2>
 
-<label>Category</label>
-<select id="cat">
-<option>Loading...</option>
-</select>
+<label>Category</label><br>
+<select id="cat"></select>
 
-<label>Sub Category</label>
-<select id="sub">
-<option>Select Category First</option>
-</select>
+<br>
+
+<label>Sub Category</label><br>
+<select id="sub"></select>
+
+<h3>Products</h3>
+
+<div id="products"></div>
 
 <script>
 
@@ -29,20 +38,22 @@ async function loadData(){
 
  const txt = await fetch(CSV_URL).then(r=>r.text());
 
- rowsData = txt.trim()
+ rowsData = txt
+ .trim()
  .split("\n")
  .slice(1)
  .map(r=>r.split(","));
 
- const cats = [...new Set(
+ const categories = [...new Set(
  rowsData.map(r=>r[2]?.trim())
  )];
 
- const cat=document.getElementById("cat");
+ const cat =
+ document.getElementById("cat");
 
  cat.innerHTML="";
 
- cats.forEach(c=>{
+ categories.forEach(c=>{
    cat.innerHTML +=
    `<option value="${c}">${c}</option>`;
  });
@@ -69,8 +80,45 @@ function loadSubCategories(){
 
  subs.forEach(s=>{
    sub.innerHTML +=
-   `<option>${s}</option>`;
+   `<option value="${s}">${s}</option>`;
  });
+
+ loadProducts();
+
+}
+
+function loadProducts(){
+
+ const selectedCat =
+ document.getElementById("cat").value;
+
+ const selectedSub =
+ document.getElementById("sub").value;
+
+ const rows =
+ rowsData.filter(r =>
+ r[2]?.trim()===selectedCat &&
+ r[3]?.trim()===selectedSub
+ );
+
+ let html =
+ "<table>" +
+ "<tr><th>Product</th><th>Rate</th></tr>";
+
+ rows.forEach(r=>{
+
+   html +=
+   "<tr>" +
+   "<td>"+(r[4]||"")+"</td>" +
+   "<td>₹"+(r[6]||"0")+"</td>" +
+   "</tr>";
+
+ });
+
+ html += "</table>";
+
+ document.getElementById("products").innerHTML =
+ html;
 
 }
 
@@ -79,6 +127,13 @@ document
 .addEventListener(
  "change",
  loadSubCategories
+);
+
+document
+.getElementById("sub")
+.addEventListener(
+ "change",
+ loadProducts
 );
 
 loadData();
