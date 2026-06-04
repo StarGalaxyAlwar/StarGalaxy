@@ -145,6 +145,10 @@ resize:vertical;
 
 <div id="products"></div>
 
+<h3>Selected Products</h3>
+<div id="quoteGrid">
+No Products Selected
+</div>
  <h3>Customer Details</h3>
 
 <label>Customer Name</label>
@@ -164,8 +168,8 @@ const CSV_URL =
 "https://docs.google.com/spreadsheets/d/e/2PACX-1vRxd_G-sJAfhK7PUWSi_g6_JHdsWqOI4ZZsULpRmRtsFUUSmXiaCswhcPi5zoohvGwN-54gIRxRs_8C/pub?gid=354666361&single=true&output=csv";
 
 let rowsData=[];
- let qtyStore = {};
-
+let qtyStore = {};
+let productStore = {};
 async function loadData(){
 
  const txt = await fetch(CSV_URL).then(r=>r.text());
@@ -280,6 +284,10 @@ function calc(el){
  Number(el.value) || 0;
 
  qtyStore[product] = qty;
+ productStore[product] = {
+ qty: qty,
+ rate: rate
+};
 
  const amt =
  qty * rate;
@@ -297,23 +305,44 @@ function updateGrandTotal(){
 
  let total = 0;
 
- document
- .querySelectorAll(".amt")
- .forEach(x=>{
+ let html =
+ "<table>" +
+ "<tr><th>Product</th><th>Qty</th><th>Rate</th><th>Amount</th></tr>";
 
-   total += Number(
-   x.innerText.replace("₹","")
-   ) || 0;
+ for(const product in productStore){
 
- });
+   const qty =
+   productStore[product].qty;
 
- let grand =
- document.getElementById("grand");
+   const rate =
+   productStore[product].rate;
 
- 
+   if(qty > 0){
 
- grand.innerHTML =
+     const amount =
+     qty * rate;
+
+     total += amount;
+
+     html +=
+     "<tr>" +
+     "<td>"+product+"</td>" +
+     "<td>"+qty+"</td>" +
+     "<td>₹"+rate+"</td>" +
+     "<td>₹"+amount+"</td>" +
+     "</tr>";
+
+   }
+
+ }
+
+ html += "</table>";
+
+ document.getElementById("grand").innerHTML =
  "Grand Total : ₹"+total;
+
+ document.getElementById("quoteGrid").innerHTML =
+ html;
 
 }
 document
