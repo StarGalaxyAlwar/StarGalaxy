@@ -2,20 +2,77 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Test</title>
+<title>Star Galaxy V89 Test</title>
 </head>
 <body>
 
-<h2>Test Working</h2>
+<h2>Google Sheet Test</h2>
 
+<p>Category</p>
 <select id="cat">
 <option>Loading...</option>
 </select>
 
+<p>Sub Category</p>
+<select id="sub">
+<option>Select Category First</option>
+</select>
+
 <script>
 
-document.getElementById("cat").innerHTML =
-"<option>Wire</option><option>Switchs</option>";
+const CSV_URL =
+"https://docs.google.com/spreadsheets/d/e/2PACX-1vRxd_G-sJAfhK7PUWSi_g6_JHdsWqOI4ZZsULpRmRtsFUUSmXiaCswhcPi5zoohvGwN-54gIRxRs_8C/pub?gid=354666361&single=true&output=csv";
+
+let rowsData = [];
+
+async function loadData(){
+
+ const txt = await fetch(CSV_URL).then(r=>r.text());
+
+ const rows = txt.trim().split("\n");
+
+ rowsData = rows.slice(1).map(r=>r.split(","));
+
+ const categories = [...new Set(rowsData.map(r=>r[2]?.trim()))];
+
+ const cat = document.getElementById("cat");
+
+ cat.innerHTML = "";
+
+ categories.forEach(c=>{
+   cat.innerHTML += `<option value="${c}">${c}</option>`;
+ });
+
+ loadSubCategories();
+
+}
+
+function loadSubCategories(){
+
+ const selectedCat =
+ document.getElementById("cat").value;
+
+ const subs = [...new Set(
+ rowsData
+ .filter(r=>r[2]?.trim()===selectedCat)
+ .map(r=>r[3]?.trim())
+ )];
+
+ const sub = document.getElementById("sub");
+
+ sub.innerHTML = "";
+
+ subs.forEach(s=>{
+   sub.innerHTML += `<option>${s}</option>`;
+ });
+
+}
+
+document
+.getElementById("cat")
+.addEventListener("change",loadSubCategories);
+
+loadData();
 
 </script>
 
