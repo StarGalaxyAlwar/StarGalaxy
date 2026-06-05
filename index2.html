@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <title>Star Galaxy V89</title>
  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
 body{
@@ -476,46 +477,83 @@ function generatePDF(){
  const { jsPDF } = window.jspdf;
  const doc = new jsPDF();
 
- let y = 20;
+ const now = new Date();
 
- doc.setFontSize(16);
- doc.text("STAR HAVELLS GALAXY", 10, y);
+ const quoteNo =
+ "SHG-" +
+ now.getFullYear() +
+ String(now.getMonth()+1).padStart(2,"0") +
+ String(now.getDate()).padStart(2,"0") +
+ "-" +
+ String(now.getHours()).padStart(2,"0") +
+ String(now.getMinutes()).padStart(2,"0") +
+ String(now.getSeconds()).padStart(2,"0");
 
- y += 10;
+ let customerName =
+ document.getElementById("custName").value || "";
 
- doc.setFontSize(12);
+ let customerMobile =
+ document.getElementById("custMobile").value || "";
+
+ let customerAddress =
+ document.getElementById("custAddress").value || "";
+
+ doc.setFontSize(18);
+ doc.text("STAR Galaxy",14,15);
+
+ doc.setFontSize(10);
 
  doc.text(
-   "Customer : " +
-   document.getElementById("custName").value,
-   10,
-   y
+ "4 Gha 36 Manu Marg, In Front of Military Hospital",
+ 14,
+ 22
  );
-
- y += 8;
 
  doc.text(
-   "Mobile : " +
-   document.getElementById("custMobile").value,
-   10,
-   y
+ "Manu Marg Bus Stand Road, Alwar",
+ 14,
+ 27
  );
-
- y += 8;
 
  doc.text(
-   "Address : " +
-   document.getElementById("custAddress").value,
-   10,
-   y
+ "Mobile : 8905123404",
+ 14,
+ 32
  );
 
- y += 15;
+ doc.setFontSize(11);
 
- doc.text("Products",10,y);
+ doc.text(
+ "Quotation No : " + quoteNo,
+ 14,
+ 42
+ );
 
- y += 10;
+ doc.text(
+ "Date : " + now.toLocaleString(),
+ 14,
+ 48
+ );
 
+ doc.text(
+ "Customer Name : " + customerName,
+ 14,
+ 58
+ );
+
+ doc.text(
+ "Mobile : " + customerMobile,
+ 14,
+ 64
+ );
+
+ doc.text(
+ "Address : " + customerAddress,
+ 14,
+ 70
+ );
+
+ let body = [];
  let total = 0;
 
  for(const product in productStore){
@@ -533,35 +571,57 @@ function generatePDF(){
 
      total += amount;
 
-     doc.text(
-       product +
-       " | Qty:" +
-       qty +
-       " | Rate:" +
-       rate +
-       " | Amt:" +
-       amount,
-       10,
-       y
-     );
-
-     y += 8;
+     body.push([
+       product,
+       qty,
+       rate,
+       amount
+     ]);
 
    }
 
  }
 
- y += 10;
+ doc.autoTable({
+   startY:80,
+   head:[
+     ["Product","Qty","Rate","Amount"]
+   ],
+   body:body,
+   theme:"grid",
+   styles:{
+     fontSize:9
+   },
+   headStyles:{
+     fillColor:[0,51,102]
+   }
+ });
+
+ let finalY =
+ doc.lastAutoTable.finalY + 10;
 
  doc.setFontSize(14);
 
  doc.text(
-   "Grand Total : ₹" + total,
-   10,
-   y
+   "Grand Total : Rs. " + total,
+   14,
+   finalY
  );
 
- doc.save("StarGalaxyQuote.pdf");
+ doc.setFontSize(8);
+
+ doc.text(
+ "Disclaimer : This quotation is for reference only. Customers are requested to confirm the latest rates, availability and commercial terms with Star Havells Galaxy before placing their order.",
+ 14,
+ finalY + 15,
+ {
+   maxWidth:180
+ }
+ );
+
+ doc.save(
+ quoteNo + ".pdf"
+ );
 
 }
  loadData();
