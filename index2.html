@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Star Galaxy V89</title>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
 body{
@@ -470,11 +471,107 @@ document
  loadProducts
 );
 
-loadData();
+function generatePDF(){
+
+ const { jsPDF } = window.jspdf;
+ const doc = new jsPDF();
+
+ let y = 20;
+
+ doc.setFontSize(16);
+ doc.text("STAR HAVELLS GALAXY", 10, y);
+
+ y += 10;
+
+ doc.setFontSize(12);
+
+ doc.text(
+   "Customer : " +
+   document.getElementById("custName").value,
+   10,
+   y
+ );
+
+ y += 8;
+
+ doc.text(
+   "Mobile : " +
+   document.getElementById("custMobile").value,
+   10,
+   y
+ );
+
+ y += 8;
+
+ doc.text(
+   "Address : " +
+   document.getElementById("custAddress").value,
+   10,
+   y
+ );
+
+ y += 15;
+
+ doc.text("Products",10,y);
+
+ y += 10;
+
+ let total = 0;
+
+ for(const product in productStore){
+
+   const qty =
+   productStore[product].qty;
+
+   const rate =
+   productStore[product].rate;
+
+   if(qty > 0){
+
+     const amount =
+     qty * rate;
+
+     total += amount;
+
+     doc.text(
+       product +
+       " | Qty:" +
+       qty +
+       " | Rate:" +
+       rate +
+       " | Amt:" +
+       amount,
+       10,
+       y
+     );
+
+     y += 8;
+
+   }
+
+ }
+
+ y += 10;
+
+ doc.setFontSize(14);
+
+ doc.text(
+   "Grand Total : ₹" + total,
+   10,
+   y
+ );
+
+ doc.save("StarGalaxyQuote.pdf");
+
+}
+ loadData();
 
 </script>
 <button class="btn" onclick="showCustomerForm()">
 Create Quote
+</button>
+ <button class="btn" onclick="generatePDF()">
+Download PDF
 </button>
 
 </div>
