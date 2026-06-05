@@ -80,7 +80,35 @@ td{
 padding:10px;
 border:1px solid #ddd;
 }
+table{
+table-layout:fixed;
+}
 
+th,td{
+text-align:center;
+vertical-align:middle;
+word-wrap:break-word;
+}
+
+td:first-child,
+th:first-child{
+width:28%;
+}
+
+td:nth-child(2),
+th:nth-child(2){
+width:20%;
+}
+
+td:nth-child(3),
+th:nth-child(3){
+width:22%;
+}
+
+td:nth-child(4),
+th:nth-child(4){
+width:30%;
+}
 tr:nth-child(even){
 background:#f8f8f8;
 }
@@ -298,7 +326,7 @@ function loadProducts(){
   const productName = r[4] || "";
 
   const savedQty =
-  qtyStore[productName] || 0;
+qtyStore[productName] || "";
 
   const rate =
   Number(r[6] || 0);
