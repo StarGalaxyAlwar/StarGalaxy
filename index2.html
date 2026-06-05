@@ -332,13 +332,12 @@ qtyStore[productName] || "";
   Number(r[6] || 0);
 
   const savedAmt =
-  savedQty * rate;
-
+(savedQty || 0) * rate;
   html +=
   "<tr>" +
   "<td>"+productName+"</td>" +
   "<td>₹"+rate+"</td>" +
-  "<td><input type='number' min='0' value='"+savedQty+"' data-product='"+productName+"' data-rate='"+rate+"' onchange='calc(this)'></td>" +
+  "<td><input type='number' min='0' placeholder='Qty' value='"+savedQty+"' data-product='"+productName+"' data-rate='"+rate+"' onchange='calc(this)'></td>" +
   "<td class='amt'>₹"+savedAmt+"</td>" +
   "</tr>";
 
