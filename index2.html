@@ -451,6 +451,9 @@ function updateGrandTotal(){
  document.getElementById("customerSection")
  .style.display = "block";
 
+ document.getElementById("pdfBtn")
+ .style.display = "block";
+
  document
  .getElementById("customerSection")
  .scrollIntoView({
@@ -458,22 +461,15 @@ function updateGrandTotal(){
  });
 
 }
-document
-.getElementById("cat")
-.addEventListener(
- "change",
- loadSubCategories
-);
-
-document
-.getElementById("sub")
-.addEventListener(
- "change",
- loadProducts
-);
-
 function generatePDF(){
 
+ let customerName =
+document.getElementById("custName").value.trim();
+
+if(customerName===""){
+ alert("Please enter Customer Name");
+ return;
+}
  const { jsPDF } = window.jspdf;
  const doc = new jsPDF();
 
@@ -489,7 +485,7 @@ function generatePDF(){
  String(now.getMinutes()).padStart(2,"0") +
  String(now.getSeconds()).padStart(2,"0");
 
- let customerName =
+ customerName =
  document.getElementById("custName").value || "";
 
  let customerMobile =
@@ -629,8 +625,10 @@ function generatePDF(){
 </script>
 <button class="btn" onclick="showCustomerForm()">
 Create Quote
-</button>
- <button class="btn" onclick="generatePDF()">
+<button id="pdfBtn"
+class="btn"
+style="display:none;"
+onclick="generatePDF()">
 Download PDF
 </button>
 
