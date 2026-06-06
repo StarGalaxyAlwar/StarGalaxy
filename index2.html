@@ -461,6 +461,19 @@ function updateGrandTotal(){
  });
 
 }
+ document
+.getElementById("cat")
+.addEventListener(
+ "change",
+ loadSubCategories
+);
+
+document
+.getElementById("sub")
+.addEventListener(
+ "change",
+ loadProducts
+);
 function generatePDF(){
 
  let customerName =
