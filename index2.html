@@ -388,8 +388,12 @@ Number(el.getAttribute("data-rate")) || 0;
 const qty =
 Number(el.value) || 0;
  qtyStore[product] = qty;
+const parts = product.split("|");
+
 productStore[product] = {
  name: productName,
+ category: parts[0],
+ subCategory: parts[1],
  qty: qty,
  rate: rate
 };
@@ -422,6 +426,8 @@ function updateGrandTotal(){
    productStore[product].rate;
   const productName =
 productStore[product].name;
+  const subCategory =
+productStore[product].subCategory;
 
    if(qty > 0){
 
@@ -433,7 +439,7 @@ productStore[product].name;
      html +=
  "<tr>" +
  "<td><button onclick=\"removeItem('"+product+"')\">❌</button></td>" +
- "<td>"+productName+"</td>" +
+ "<td>"+productName+" ("+subCategory+")</td>" +
  "<td>"+qty+"</td>" +
  "<td>₹"+rate+"</td>" +
  "<td>₹"+amount+"</td>" +
