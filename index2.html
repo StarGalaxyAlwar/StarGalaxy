@@ -407,7 +407,7 @@ function updateGrandTotal(){
 
  let html =
  "<table>" +
- "<tr><th>Product</th><th>Qty</th><th>Rate</th><th>Amount</th></tr>";
+"<tr><th></th><th>Product</th><th>Qty</th><th>Rate</th><th>Amount</th></tr>";
 
  for(const product in productStore){
 
@@ -425,13 +425,13 @@ function updateGrandTotal(){
      total += amount;
 
      html +=
-     "<tr>" +
-     "<td>"+product+"</td>" +
-     "<td>"+qty+"</td>" +
-     "<td>₹"+rate+"</td>" +
-     "<td>₹"+amount+"</td>" +
-     "</tr>";
-
+ "<tr>" +
+ "<td><button onclick=\"removeItem('"+product+"')\">❌</button></td>" +
+ "<td>"+product+"</td>" +
+ "<td>"+qty+"</td>" +
+ "<td>₹"+rate+"</td>" +
+ "<td>₹"+amount+"</td>" +
+ "</tr>";
    }
 
  }
@@ -445,7 +445,22 @@ function updateGrandTotal(){
  html;
 
 }
+function removeItem(product){
 
+ delete qtyStore[product];
+ delete productStore[product];
+
+ document
+ .querySelectorAll(
+ '[data-product="'+product+'"]'
+ )
+ .forEach(el=>{
+   el.value="";
+ });
+
+ updateGrandTotal();
+
+}
  function showCustomerForm(){
 
  document.getElementById("customerSection")
