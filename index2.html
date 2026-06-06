@@ -345,9 +345,12 @@ function loadProducts(){
  rows.forEach(r=>{
 
   const productName = r[4] || "";
-
+const productKey =
+selectedCat + "|" +
+selectedSub + "|" +
+productName;
   const savedQty =
-qtyStore[productName] || "";
+qtyStore[productKey] || "";
 
   const rate =
   Number(r[6] || 0);
@@ -358,7 +361,8 @@ qtyStore[productName] || "";
   "<tr>" +
   "<td>"+productName+"</td>" +
   "<td>₹"+rate+"</td>" +
-  "<td><input type='number' min='0' placeholder='Qty' value='"+savedQty+"' data-product='"+productName+"' data-rate='"+rate+"' onchange='calc(this)'></td>" +
+  "<td><input type='number' min='0' placeholder='Qty' value='"+savedQty+"' data-product='"+productKey+"'
+data-name='"+productName+"' data-rate='"+rate+"' onchange='calc(this)'></td>" +
   "<td class='amt'>₹"+savedAmt+"</td>" +
   "</tr>";
 
@@ -375,20 +379,22 @@ qtyStore[productName] || "";
 function calc(el){
 
  const product =
- el.getAttribute("data-product");
+el.getAttribute("data-product");
 
- const rate =
- Number(el.getAttribute("data-rate")) || 0;
+const productName =
+el.getAttribute("data-name");
 
- const qty =
- Number(el.value) || 0;
+const rate =
+Number(el.getAttribute("data-rate")) || 0;
 
+const qty =
+Number(el.value) || 0;
  qtyStore[product] = qty;
- productStore[product] = {
+productStore[product] = {
+ name: productName,
  qty: qty,
  rate: rate
 };
-
  const amt =
  qty * rate;
 
@@ -416,6 +422,8 @@ function updateGrandTotal(){
 
    const rate =
    productStore[product].rate;
+  const productName =
+productStore[product].name;
 
    if(qty > 0){
 
@@ -427,7 +435,7 @@ function updateGrandTotal(){
      html +=
  "<tr>" +
  "<td><button onclick=\"removeItem('"+product+"')\">❌</button></td>" +
- "<td>"+product+"</td>" +
+ "<td>"+productName+"</td>" +
  "<td>"+qty+"</td>" +
  "<td>₹"+rate+"</td>" +
  "<td>₹"+amount+"</td>" +
