@@ -600,6 +600,11 @@ doc.text("STAR HAVELLS GALAXY",14,15);
 
    const rate =
    productStore[product].rate;
+  const productName =
+productStore[product].name;
+
+const subCategory =
+productStore[product].subCategory;
 
    if(qty > 0){
 
@@ -609,11 +614,11 @@ doc.text("STAR HAVELLS GALAXY",14,15);
      total += amount;
 
      body.push([
-       product,
-       qty,
-       rate,
-       amount
-     ]);
+ productName + " (" + subCategory + ")",
+ qty,
+ rate,
+ amount
+]);
 
    }
 
