@@ -591,6 +591,7 @@ doc.text("STAR HAVELLS GALAXY",14,15);
  );
 
  let body = [];
+ let logProducts = [];
  let total = 0;
 
  for(const product in productStore){
@@ -619,6 +620,13 @@ productStore[product].subCategory;
  rate,
  amount
 ]);
+    logProducts.push({
+ product:
+ productName + " (" + subCategory + ")",
+ qty: qty,
+ rate: rate,
+ amount: amount
+});
 
    }
 
@@ -664,6 +672,37 @@ productStore[product].subCategory;
  doc.save(
  quoteNo + ".pdf"
  );
+ fetch(
+"https://script.google.com/macros/s/AKfycbzrAKmm9RZiZ68rLXI_McAUrVAzKxB1FZceZXC43Goq1al-hq5AYyKBYGDjUDvttA9NMA/exec",
+{
+ method:"POST",
+ headers:{
+   "Content-Type":"application/json"
+ },
+ body:JSON.stringify({
+   dateTime:
+   now.toLocaleString(),
+
+   quoteNo:
+   quoteNo,
+
+   customerName:
+   customerName,
+
+   mobile:
+   customerMobile,
+
+   grandTotal:
+   total,
+
+   products:
+   logProducts
+ })
+}
+)
+.then(r=>r.text())
+.then(d=>console.log("Logged"))
+.catch(err=>console.log(err));
 
 }
  loadData();
