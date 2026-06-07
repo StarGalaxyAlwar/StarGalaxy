@@ -676,40 +676,23 @@ productStore[product].subCategory;
 "https://script.google.com/macros/s/AKfycbzrAKmm9RZiZ68rLXI_McAUrVAzKxB1FZceZXC43Goq1al-hq5AYyKBYGDjUDvttA9NMA/exec",
 {
  method:"POST",
- headers:{
-   "Content-Type":"application/json"
- },
+ mode:"no-cors",
  body:JSON.stringify({
-   dateTime:
-   now.toLocaleString(),
-
-   quoteNo:
-   quoteNo,
-
-   customerName:
-   customerName,
-
-   mobile:
-   customerMobile,
-
-   grandTotal:
-   total,
-
-   products:
-   logProducts
+   dateTime: now.toLocaleString(),
+   quoteNo: quoteNo,
+   customerName: customerName,
+   mobile: customerMobile,
+   grandTotal: total,
+   products: logProducts
  })
 }
 )
-.then(r=>r.text())
-.then(d=>{
-  console.log("SERVER RESPONSE:", d);
-  alert(d);
+.then(()=>{
+  console.log("Data Sent");
 })
 .catch(err=>{
-  console.error(err);
-  alert("ERROR: " + err);
+  console.log(err);
 });
-
 }
  loadData();
 
