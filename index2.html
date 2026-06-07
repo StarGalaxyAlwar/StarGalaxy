@@ -477,6 +477,19 @@ function removeItem(product){
 
  document.getElementById("customerSection")
  .style.display = "block";
+  let hasItems = false;
+
+for(const product in productStore){
+  if(productStore[product].qty > 0){
+    hasItems = true;
+    break;
+  }
+}
+
+if(!hasItems){
+  alert("Please add at least one product to quotation");
+  return;
+}
 
  document.getElementById("pdfBtn")
  .style.display = "block";
