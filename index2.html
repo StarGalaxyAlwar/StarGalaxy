@@ -510,6 +510,32 @@ if(customerName===""){
  alert("Please enter Customer Name");
  return;
 }
+ let customerMobile =
+document.getElementById("custMobile").value.trim();
+
+// Mobile mandatory
+if(customerMobile===""){
+ alert("Please enter Mobile Number");
+ return;
+}
+
+// Sirf digits allow
+if(!/^\d+$/.test(customerMobile)){
+ alert("Mobile Number must contain digits only");
+ return;
+}
+
+// Exact 10 digit
+if(customerMobile.length !== 10){
+ alert("Mobile Number must be exactly 10 digits");
+ return;
+}
+
+// Indian mobile validation (6,7,8,9 se start)
+if(!/^[6-9]\d{9}$/.test(customerMobile)){
+ alert("Please enter a valid Indian Mobile Number");
+ return;
+}
  const { jsPDF } = window.jspdf;
  const doc = new jsPDF();
 
@@ -528,9 +554,8 @@ if(customerName===""){
  customerName =
  document.getElementById("custName").value || "";
 
- let customerMobile =
- document.getElementById("custMobile").value || "";
-
+ customerMobile =
+document.getElementById("custMobile").value.trim();
  let customerAddress =
  document.getElementById("custAddress").value || "";
 
